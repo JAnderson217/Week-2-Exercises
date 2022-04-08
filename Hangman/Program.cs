@@ -47,38 +47,33 @@ namespace Hangman
                 return lines[random.Next(lines.Length)];
             }
             Console.WriteLine("Enter a word:");
-            return Console.ReadLine();
+            return Console.ReadLine().ToLower();
         }
         public static char getGuess(List<char> guesses)
         {
             //Return char guess
             char guess = ' ';
-            int count = 0;
+            //int count = 0;
             while (guess.Equals(' '))
             {
                 Console.WriteLine("Please enter a letter to guess: ");
-                guess = Console.ReadLine()[0];
-                //search duplicate guess
+                guess = Char.ToLower(Console.ReadLine()[0]);
+                //Search for duplicate guess
                 foreach (char c in guesses)
                 {
                     if (c.Equals(guess))
                     {
                         Console.WriteLine("Already guessed!");
                         guess = ' ';
-                        count++;
                     }
                 }
-                if (count==0) {
-                    return guess;   
-                }
             }
-            //to have return type, will not be used
             return guess;
         }
 
         public static int checkGuess(String str, List<char> guesses, int lives)
         {
-            //Check if guess correct, return 
+            //Get number of lives, if guess incorrect lives -1
             if (!str.Contains(guesses[guesses.Count - 1]))
             {
                 lives--;
