@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Hangman
@@ -13,7 +14,7 @@ namespace Hangman
             //Generate word to guess
             Console.WriteLine("Enter 1 for Random word or 2 to Enter a word: ");
             string wordToGuess = getWord(Console.ReadLine());
-            int lives = 5;
+            int lives = 9;
             bool correct = false;
             string secretWord = new String('-', wordToGuess.Length);
             List<char> guesses = new List<char>();
@@ -31,6 +32,7 @@ namespace Hangman
                 Console.WriteLine();
                 secretWord = updateWord(secretWord, wordToGuess, guesses);
                 lives = checkGuess(secretWord, guesses, lives);
+                drawHangman(lives);
                 correct = checkWon(secretWord, wordToGuess, lives);
             }
             Console.ReadLine();
@@ -64,6 +66,11 @@ namespace Hangman
                     if (c.Equals(guess))
                     {
                         Console.WriteLine("Already guessed!");
+                        guess = ' ';
+                    }
+                    else if (!Regex.IsMatch(c.ToString(), "[a-z]", RegexOptions.IgnoreCase))
+                    {
+                        Console.WriteLine("Invalid guess, must be a-z");
                         guess = ' ';
                     }
                 }
@@ -117,6 +124,21 @@ namespace Hangman
                 return true;
             }
             return false;
+        }
+
+        static void drawHangman(int lives)
+        {
+            string[] Hangman = new string[] { "",
+                "\n" + "\n | " + "\n | " + "\n | " + "\n | " + "\n | " + "\n |_______________________\n",
+                "\n___________________" + "\n|" + "\n|" + "\n|" + "\n|" + "\n|" + "\n|_______________________\n",
+                "\n___________________" + "\n|                  |" + "\n|" + "\n|" + "\n|" + "\n|" + "\n|_______________________\n",
+                "\n___________________" + "\n|                  |" + "\n|                  O" + "\n|" + "\n|" + "\n|" + "\n|_______________________\n",
+                "\n___________________" + "\n|                  |" + "\n|                  O" + "\n|                  |" + "\n|" + "\n|" + "\n|_______________________\n",
+                "\n___________________" + "\n|                  |" + "\n|                  O" + "\n|               ---|" + "\n|" + "\n|" + "\n|_______________________\n",
+                "\n___________________" + "\n|                  |" + "\n|                  O" + "\n|               ---|---" + "\n|" + "\n|" + "\n|_______________________\n",
+                "\n___________________" + "\n|                  |" + "\n|                  O" + "\n|               ---|---" + "\n|                  /" + "\n|                 /" + "\n|_______________________\n",
+                "\n___________________" + "\n|                  |" + "\n|                  O" + "\n|               ---|---" + "\n|                  /\\" + "\n|                 /  \\" + "\n|_______________________"};
+            Console.WriteLine(Hangman[9-lives]);
         }
     }
 }
